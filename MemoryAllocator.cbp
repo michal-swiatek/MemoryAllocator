@@ -39,7 +39,8 @@
 		<Unit filename="Logger/Internal/Logger.cpp" />
 		<Unit filename="Logger/Internal/ObserverPattern.h" />
 		<Unit filename="Logger/Logger.h" />
-		<Unit filename="MemoryAllocator/Allocator.h" />
+		<Unit filename="MemoryAllocator/Internal/Allocator.h" />
+		<Unit filename="MemoryAllocator/MemoryAllocator.h" />
 		<Unit filename="main.cpp" />
 		<Extensions>
 			<code_completion />
