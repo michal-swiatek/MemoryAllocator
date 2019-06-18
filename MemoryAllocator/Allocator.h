@@ -2,26 +2,19 @@
 #define __ALLOCATOR__
 
 #include <cassert>
+#include <cstdlib>
+#include <utility>
+#include <cstdint>
+
+#include <iostream>
 
 namespace MEM {
 
     class Allocator
     {
     private:
-        //  Copying might cause errors or memory leaks
-        Allocator(const Allocator& rhs) = delete;
-        Allocator& operator = (const Allocator& rhs) = delete;
-
-        virtual void* allocate(size_t sizeInBytes, size_t alignment = 4)
-        {
-            assert(!"Overload allocate method!\n");
-            return nullptr;
-        }
-
-        virtual void  free(void* ptr)
-        {
-            assert(!"Overload free method!\n");
-        }
+        virtual void* allocate(size_t sizeInBytes, uint8_t alignment = 4) = 0;
+        virtual void  deallocate(void* ptr) = 0;
 
     protected:
         void* memoryChunk;
@@ -31,8 +24,12 @@ namespace MEM {
         size_t numberOfAllocations;
 
     public:
+        Allocator() : memoryChunk(nullptr), chunkSize(0), allocatedMemory(0), numberOfAllocations(0) { }
+
         Allocator(size_t chunkSize, void* memoryChunk)
         {
+            assert(chunkSize > 0 && memoryChunk);
+
             this->memoryChunk = memoryChunk;
 
             this->chunkSize = chunkSize;
@@ -50,6 +47,7 @@ namespace MEM {
         //
 
         inline void* allocateRaw(size_t memoryChunkSize) { return allocate(memoryChunkSize); }
+        inline void  deallocateRaw(void* ptr)            { deallocate(ptr); }
 
         //  Use this instead of new and delete
 
@@ -63,7 +61,7 @@ namespace MEM {
         inline void Delete(T& object)
         {
             object.~T();
-            free(&object);
+            deallocate(&object);
         }
 
         //  Getters & setters
@@ -77,7 +75,7 @@ namespace MEM {
 
     //  Helper functions
 
-    namespace Internal {
+    namespace Align {
 
         inline void* AlignForward(void* ptr, uint8_t alignment)
         {

@@ -1,12 +1,12 @@
-#include "Logger/Logger.h"
+#include "Testing/LinearAllocatorTest.h"
 
-#include "MemoryAllocator/MemoryAllocator.h"
+using namespace MEM;
 
 int main()
 {
-    LOG_Init(LOG_INIT_CONSOLE_LOGGER);
+    LinearAllocatorTest test1;
 
-    LOG_Quit();
+    test1.test();
 
     return 0;
 }

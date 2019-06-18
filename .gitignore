@@ -5,3 +5,5 @@
 *.depend
 *.layout
 *.o
+*.exe
+*.o
