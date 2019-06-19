@@ -6,8 +6,6 @@
 #include <utility>
 #include <cstdint>
 
-#include <iostream>
-
 namespace MEM {
 
     class Allocator
@@ -21,10 +19,17 @@ namespace MEM {
 
         size_t chunkSize;
         size_t allocatedMemory; //  Number of memory allocated during allocator lifetime
+        #ifdef DEBUG_MODE
         size_t numberOfAllocations;
+        #endif
 
     public:
-        Allocator() : memoryChunk(nullptr), chunkSize(0), allocatedMemory(0), numberOfAllocations(0) { }
+        Allocator() : memoryChunk(nullptr), chunkSize(0), allocatedMemory(0)
+        {
+            #ifdef DEBUG_MODE
+            numberOfAllocations = 0;
+            #endif
+        }
 
         Allocator(size_t chunkSize, void* memoryChunk)
         {
@@ -34,19 +39,23 @@ namespace MEM {
 
             this->chunkSize = chunkSize;
             this->allocatedMemory = 0;
+            #ifdef DEBUG_MODE
             this->numberOfAllocations = 0;
+            #endif
         }
 
         virtual ~Allocator()
         {
+            #ifdef DEBUG_MODE
             assert(allocatedMemory == 0 && numberOfAllocations == 0);
+            #endif
         }
 
         //
         //  Memory allocation
         //
 
-        inline void* allocateRaw(size_t memoryChunkSize) { return allocate(memoryChunkSize); }
+        inline void* allocateRaw(size_t memoryChunkSize, uint8_t alignment = 4) { return allocate(memoryChunkSize, alignment); }
         inline void  deallocateRaw(void* ptr)            { deallocate(ptr); }
 
         //  Use this instead of new and delete
@@ -58,19 +67,22 @@ namespace MEM {
         }
 
         template <typename T>
-        inline void Delete(T& object)
+        inline void Delete(T* object)
         {
-            object.~T();
-            deallocate(&object);
+            object->~T();
+            deallocate(object);
         }
 
         //  Getters & setters
 
         inline void*  getMemoryChunk() { return memoryChunk; }
         inline size_t getMemoryChunkSize() const { return chunkSize; }
+
         inline size_t getAllocatedMemory() const { return allocatedMemory; }
         inline size_t getRemainingMemory() const { return chunkSize - allocatedMemory; }
+        #ifdef DEBUG_MODE
         inline size_t getNumberOfAllocations() const { return numberOfAllocations; }
+        #endif
     };
 
     //  Helper functions

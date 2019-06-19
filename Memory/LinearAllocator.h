@@ -16,14 +16,16 @@ namespace MEM {
         //  Memory allocation
         //
 
-        void* allocate(size_t sizeInBytes, uint8_t alignment = 4) override
+        inline void* allocate(size_t sizeInBytes, uint8_t alignment = 4) final
         {
             uint8_t adjustment = Align::AlignForwardAdjustment(currPos, alignment);
 
             if (allocatedMemory + sizeInBytes + adjustment > chunkSize)  return nullptr;
 
             allocatedMemory += sizeInBytes + adjustment;
+            #ifdef DEBUG_MODE
             numberOfAllocations++;
+            #endif
 
             char* alignedMemory = reinterpret_cast<char*>(currPos) + adjustment;
             currPos = reinterpret_cast<void*>(alignedMemory + sizeInBytes);
@@ -31,7 +33,7 @@ namespace MEM {
             return reinterpret_cast<void*>(alignedMemory);
         }
 
-        void  deallocate(void* ptr)
+        inline void  deallocate(void* ptr) final
         {
             std::cerr << "Use clearMemory() instead of deallocate for linear allocator!\n";
         }
@@ -46,7 +48,9 @@ namespace MEM {
             currPos = memoryChunk;
 
             allocatedMemory = 0;
+            #ifdef DEBUG_MODE
             numberOfAllocations = 0;
+            #endif
         }
     };
 }

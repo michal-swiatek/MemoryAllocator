@@ -5,6 +5,9 @@
 
 //  From https://stackoverflow.com/questions/728068/how-to-calculate-a-time-difference-in-c
 
+const int kB = 1024;
+const int MB = 1024 * 1024;
+
 class Timer
 {
 public:

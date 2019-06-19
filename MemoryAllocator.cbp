@@ -21,7 +21,8 @@
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Compiler>
-					<Add option="-O2" />
+					<Add option="-O3" />
+					<Add option="-std=c++14" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -32,15 +33,12 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
-		<Unit filename="Logger/Internal/ConsoleLogger.h" />
-		<Unit filename="Logger/Internal/FileLogger.h" />
-		<Unit filename="Logger/Internal/ILogger.h" />
-		<Unit filename="Logger/Internal/LogHistory.h" />
-		<Unit filename="Logger/Internal/Logger.cpp" />
-		<Unit filename="Logger/Internal/ObserverPattern.h" />
-		<Unit filename="Logger/Logger.h" />
-		<Unit filename="MemoryAllocator/Internal/Allocator.h" />
-		<Unit filename="MemoryAllocator/MemoryAllocator.h" />
+		<Unit filename="Memory/Allocator.h" />
+		<Unit filename="Memory/LinearAllocator.h" />
+		<Unit filename="Memory/PoolAllocator.h" />
+		<Unit filename="Testing/LinearAllocatorTest.h" />
+		<Unit filename="Testing/PoolAllocatorTest.h" />
+		<Unit filename="Testing/Timer.h" />
 		<Unit filename="main.cpp" />
 		<Extensions>
 			<code_completion />

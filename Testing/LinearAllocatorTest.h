@@ -3,10 +3,7 @@
 
 #include "Timer.h"
 
-#include "../MemoryAllocator/LinearAllocator.h"
-
-const int kB = CHAR_BIT * 1024;
-const int MB = CHAR_BIT * 1024 * 1024;
+#include "../Memory/LinearAllocator.h"
 
 class LinearAllocatorTest
 {
@@ -46,7 +43,7 @@ private:
             testArray[i] = malloc(memorySize);
 
         elapsedTime = timer.elapsed();
-        std::cout << "Malloc " <<  memorySize / (CHAR_BIT * (sufix == "MB" ? 1024 * 1024 : (sufix == "kB" ? 1024 : 1))) << sufix << ", " << numberOfAllocations << " allocations: " << (double)(elapsedTime / 1000000.f) << "s" << '\n';
+        std::cout << "Malloc " <<  memorySize / (sufix == "MB" ? 1024 * 1024 : (sufix == "kB" ? 1024 : 1)) << sufix << ", " << numberOfAllocations << " allocations: " << (double)(elapsedTime / 1000000.f) << "s" << '\n';
         mallocTotalTime += elapsedTime;
 
         //      Cleanup
@@ -64,7 +61,7 @@ private:
             testArray[i] = linearAllocator.allocateRaw(memorySize);
 
         elapsedTime = timer.elapsed();
-        std::cout << "Allocator " << memorySize / (CHAR_BIT * (sufix == "MB" ? 1024 * 1024 : (sufix == "kB" ? 1024 : 1))) << sufix << ", " << numberOfAllocations << " allocations: " << (double)(elapsedTime / 1000000.f) << "s" << '\n';
+        std::cout << "Allocator " << memorySize / (sufix == "MB" ? 1024 * 1024 : (sufix == "kB" ? 1024 : 1)) << sufix << ", " << numberOfAllocations << " allocations: " << (double)(elapsedTime / 1000000.f) << "s" << '\n';
         allocatorTotalTime += elapsedTime;
 
         //      Cleanup
@@ -75,7 +72,7 @@ private:
         elapsedTime = timer.elapsed();
         std::cout << "ClearMemory: " << elapsedTime / 1000000.f << "ms\n";
 
-        std::cout << "\n\n\n";
+        std::cout << "\n";
     }
 
 public:
@@ -91,19 +88,24 @@ public:
 
     void test()
     {
-        testInternal(50 * MB, "MB", 3);
-        testInternal(2 * MB, "MB", 10);
-        testInternal(1 * MB, "MB", 30);
+//        testInternal(50 * MB, "MB", 3);
+//        testInternal(2 * MB, "MB", 10);
+//        testInternal(1 * MB, "MB", 30);
+//
+//        testInternal(500 * kB, "kB", 100);
+//        testInternal(100 * kB, "kB", 500);
+//        testInternal(kB, "kB", 10000);
 
-        testInternal(500 * kB, "kB", 100);
-        testInternal(100 * kB, "kB", 500);
-        testInternal(kB, "kB", 10000);
+        testInternal(4, "B", 100000);
+        testInternal(1, "B", 100000);
 
-        testInternal(CHAR_BIT * 5, "B", 100000);
-        testInternal(CHAR_BIT, "B", 100000);
+//        testInternal(16, "B", 10000);
+//        testInternal(256, "B", 1000);
+//        testInternal(2 * MB, "MB", 50);
 
         std::cout << "Total malloc allocation time: " << mallocTotalTime / 1000000.f << "s" << '\n';
         std::cout << "Total allocator allocation time: " << allocatorTotalTime /1000000.f << "s" << '\n';
+        std::cout << "\n\n\n";
     }
 };
 

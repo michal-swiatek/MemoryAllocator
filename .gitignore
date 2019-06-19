@@ -7,3 +7,7 @@
 *.o
 *.exe
 *.o
+*.exe
+*.cbp
+*.layout
+*.o
