@@ -10,10 +10,6 @@ namespace MEM {
 
     class Allocator
     {
-    private:
-        virtual void* allocate(size_t sizeInBytes, uint8_t alignment = 4) = 0;
-        virtual void  deallocate(void* ptr) = 0;
-
     protected:
         void* memoryChunk;
 
@@ -55,8 +51,8 @@ namespace MEM {
         //  Memory allocation
         //
 
-        inline void* allocateRaw(size_t memoryChunkSize, uint8_t alignment = 4) { return allocate(memoryChunkSize, alignment); }
-        inline void  deallocateRaw(void* ptr)            { deallocate(ptr); }
+        virtual void* allocate(size_t sizeInBytes, uint8_t alignment = 4) = 0;
+        virtual void  deallocate(void* ptr) = 0;
 
         //  Use this instead of new and delete
 

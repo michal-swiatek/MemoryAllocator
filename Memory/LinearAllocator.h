@@ -12,6 +12,11 @@ namespace MEM {
     private:
         void* currPos = nullptr;
 
+    public:
+        LinearAllocator() { }
+        LinearAllocator(size_t chunkSize, void* memoryChunk) : Allocator(chunkSize, memoryChunk), currPos(memoryChunk) { }
+        ~LinearAllocator() { memoryChunk = currPos = nullptr; }
+
         //
         //  Memory allocation
         //
@@ -37,11 +42,6 @@ namespace MEM {
         {
             std::cerr << "Use clearMemory() instead of deallocate for linear allocator!\n";
         }
-
-    public:
-        LinearAllocator() { }
-        LinearAllocator(size_t chunkSize, void* memoryChunk) : Allocator(chunkSize, memoryChunk), currPos(memoryChunk) { }
-        ~LinearAllocator() { memoryChunk = currPos = nullptr; }
 
         void clearMemory()
         {

@@ -11,34 +11,6 @@ namespace MEM {
     private:
         void** freeList;
 
-        inline void* allocate(size_t sizeInBytes, uint8_t alignment = 4) final
-        {
-            assert(sizeInBytes == sizeof(T) && alignment == alignof(T));
-
-            if (!freeList)  return nullptr;
-
-            void* ptr = reinterpret_cast<void*>(freeList);
-            freeList = reinterpret_cast<void**>(*freeList);
-
-            allocatedMemory += sizeInBytes;
-            #ifdef DEBUG_MODE
-            numberOfAllocations++;
-            #endif
-
-            return ptr;
-        }
-
-        inline void deallocate(void* ptr) final
-        {
-            *reinterpret_cast<void**>(ptr) = reinterpret_cast<void*>(freeList);
-            freeList = reinterpret_cast<void**>(ptr);
-
-            allocatedMemory -= sizeof(T);
-            #ifdef DEBUG_MODE
-            numberOfAllocations--;
-            #endif
-        }
-
         inline void** movePointer(void** ptr, size_t offset)
         {
             return reinterpret_cast<void**>(reinterpret_cast<char*>(ptr) + offset);
@@ -71,6 +43,34 @@ namespace MEM {
         ~PoolAllocator()
         {
             freeList = nullptr;
+        }
+
+        inline void* allocate(size_t sizeInBytes, uint8_t alignment = 4) final
+        {
+            assert(sizeInBytes == sizeof(T) && alignment == alignof(T));
+
+            if (!freeList)  return nullptr;
+
+            void* ptr = reinterpret_cast<void*>(freeList);
+            freeList = reinterpret_cast<void**>(*freeList);
+
+            allocatedMemory += sizeInBytes;
+            #ifdef DEBUG_MODE
+            numberOfAllocations++;
+            #endif
+
+            return ptr;
+        }
+
+        inline void deallocate(void* ptr) final
+        {
+            *reinterpret_cast<void**>(ptr) = reinterpret_cast<void*>(freeList);
+            freeList = reinterpret_cast<void**>(ptr);
+
+            allocatedMemory -= sizeof(T);
+            #ifdef DEBUG_MODE
+            numberOfAllocations--;
+            #endif
         }
     };
 }

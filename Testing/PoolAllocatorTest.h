@@ -56,7 +56,7 @@ private:
         //      Allocator
         timer.reset();
         for (size_t i = 0; i < numberOfAllocations; i++) {
-            tab[i] = poolAllocator.allocateRaw(sizeof(T), alignof(T));
+            tab[i] = poolAllocator.allocate(sizeof(T), alignof(T));
         }
 
         elapsedTime = timer.elapsed();
@@ -64,7 +64,7 @@ private:
         allocatorTotalTime += elapsedTime;
 
         for (size_t i = 0; i < numberOfAllocations; i++)
-            poolAllocator.deallocateRaw(tab[i]);
+            poolAllocator.deallocate(tab[i]);
 
         std::cout << "\n";
     }

@@ -58,7 +58,7 @@ private:
         //      Allocator
         timer.reset();
         for (size_t i = 0; i < numberOfAllocations; i++)
-            testArray[i] = linearAllocator.allocateRaw(memorySize);
+            testArray[i] = linearAllocator.allocate(memorySize);
 
         elapsedTime = timer.elapsed();
         std::cout << "Allocator " << memorySize / (sufix == "MB" ? 1024 * 1024 : (sufix == "kB" ? 1024 : 1)) << sufix << ", " << numberOfAllocations << " allocations: " << (double)(elapsedTime / 1000000.f) << "s" << '\n';
