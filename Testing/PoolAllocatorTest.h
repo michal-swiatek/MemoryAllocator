@@ -20,22 +20,6 @@ private:
     double mallocTotalTime = 0.0;
     double allocatorTotalTime = 0.0;
 
-    //  Tests
-
-    //  3 * 50Mb -> 150Mb
-    //  10 * 2Mb -> 20Mb
-    //  30 * 1Mb -> 30Mb
-    //  200Mb
-
-    //  100 * 500kB -> 50Mb
-    //  500 * 100kB -> 50Mb
-    //  10,000 * 1kB -> 10Mb
-    //  110Mb
-
-    //  100,000 * 50B -> 500kB, 0.5Mb
-    //  100,000 * 1B -> 0.1Mb
-    //  0,6Mb
-
     void testInternal(size_t numberOfAllocations)
     {
         double elapsedTime;

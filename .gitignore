@@ -11,3 +11,4 @@
 *.cbp
 *.layout
 *.o
+.gitattributes

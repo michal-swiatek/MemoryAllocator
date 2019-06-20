@@ -17,22 +17,6 @@ private:
 
     void* testArray[100000];
 
-    //  Tests
-
-    //  3 * 50Mb -> 150Mb
-    //  10 * 2Mb -> 20Mb
-    //  30 * 1Mb -> 30Mb
-    //  200Mb
-
-    //  100 * 500kB -> 50Mb
-    //  500 * 100kB -> 50Mb
-    //  10,000 * 1kB -> 10Mb
-    //  110Mb
-
-    //  100,000 * 50B -> 500kB, 0.5Mb
-    //  100,000 * 1B -> 0.1Mb
-    //  0,6Mb
-
     void testInternal(size_t memorySize, std::string sufix, size_t numberOfAllocations)
     {
         double elapsedTime;
@@ -88,20 +72,16 @@ public:
 
     void test()
     {
-//        testInternal(50 * MB, "MB", 3);
-//        testInternal(2 * MB, "MB", 10);
-//        testInternal(1 * MB, "MB", 30);
-//
-//        testInternal(500 * kB, "kB", 100);
-//        testInternal(100 * kB, "kB", 500);
-//        testInternal(kB, "kB", 10000);
+        testInternal(50 * MB, "MB", 3);
+        testInternal(2 * MB, "MB", 10);
+        testInternal(1 * MB, "MB", 30);
+
+        testInternal(500 * kB, "kB", 100);
+        testInternal(100 * kB, "kB", 500);
+        testInternal(kB, "kB", 10000);
 
         testInternal(4, "B", 100000);
         testInternal(1, "B", 100000);
-
-//        testInternal(16, "B", 10000);
-//        testInternal(256, "B", 1000);
-//        testInternal(2 * MB, "MB", 50);
 
         std::cout << "Total malloc allocation time: " << mallocTotalTime / 1000000.f << "s" << '\n';
         std::cout << "Total allocator allocation time: " << allocatorTotalTime /1000000.f << "s" << '\n';
