@@ -59,8 +59,11 @@ namespace MEM {
             size_t numberOfObjects = (chunkSize - adjustment) / objectSize;
 
             //  Initialization of free list
-            for (size_t i = 0; i < numberOfObjects - 1; i++)
-                *movePointer(freeList, i * objectSize) = (void*)movePointer(freeList, (i + 1) * objectSize);
+            T* listPtr = reinterpret_cast<T*>(freeList);
+
+            for (size_t i = 0; i < numberOfObjects - 1; ++i, ++listPtr)
+                *reinterpret_cast<void**>(listPtr) = reinterpret_cast<void*>(listPtr + 1);
+//                *movePointer(freeList, i * objectSize) = (void*)movePointer(freeList, (i + 1) * objectSize);
 
             *movePointer(freeList, (numberOfObjects - 1) * objectSize) = nullptr;
         }
