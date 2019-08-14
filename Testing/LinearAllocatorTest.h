@@ -9,7 +9,7 @@ class LinearAllocatorTest
 {
 
 private:
-    MEM::LinearAllocator linearAllocator;
+    MEM::LinearAllocator* linearAllocator;
     Timer timer;
 
     double mallocTotalTime = 0.0;
@@ -42,7 +42,7 @@ private:
         //      Allocator
         timer.reset();
         for (size_t i = 0; i < numberOfAllocations; i++)
-            testArray[i] = linearAllocator.allocate(memorySize);
+            testArray[i] = linearAllocator->allocate(memorySize);
 
         elapsedTime = timer.elapsed();
         std::cout << "Allocator " << memorySize / (sufix == "MB" ? 1024 * 1024 : (sufix == "kB" ? 1024 : 1)) << sufix << ", " << numberOfAllocations << " allocations: " << (double)(elapsedTime / 1000000.f) << "s" << '\n';
@@ -51,7 +51,7 @@ private:
         //      Cleanup
 
         timer.reset();
-        linearAllocator.clearMemory();
+        linearAllocator->clearMemory();
 
         elapsedTime = timer.elapsed();
         std::cout << "ClearMemory: " << elapsedTime / 1000000.f << "ms\n";
@@ -62,12 +62,13 @@ private:
 public:
     LinearAllocatorTest()
     {
-        linearAllocator = MEM::LinearAllocator(160 * MB, malloc(160 * MB));
+        linearAllocator = new MEM::LinearAllocator(160 * MB, malloc(160 * MB));
     }
 
     ~LinearAllocatorTest()
     {
-        free(linearAllocator.getMemoryChunk());
+        free(linearAllocator->getMemoryChunk());
+        delete linearAllocator;
     }
 
     void test()

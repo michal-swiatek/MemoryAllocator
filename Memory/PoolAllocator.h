@@ -17,8 +17,6 @@ namespace MEM {
         }
 
     public:
-        PoolAllocator() { }
-
         PoolAllocator(size_t chunkSize, void* memoryChunk) : Allocator(chunkSize, memoryChunk)
         {
             //  empty blocks hold pointer to next memory block
@@ -35,7 +33,6 @@ namespace MEM {
 
             for (size_t i = 0; i < numberOfObjects - 1; ++i, ++listPtr)
                 *reinterpret_cast<void**>(listPtr) = reinterpret_cast<void*>(listPtr + 1);
-//                *movePointer(freeList, i * objectSize) = (void*)movePointer(freeList, (i + 1) * objectSize);
 
             *movePointer(freeList, (numberOfObjects - 1) * objectSize) = nullptr;
         }
@@ -55,7 +52,7 @@ namespace MEM {
             freeList = reinterpret_cast<void**>(*freeList);
 
             allocatedMemory += sizeInBytes;
-            #ifdef DEBUG_MODE
+            #ifdef DEBUG
             numberOfAllocations++;
             #endif
 
@@ -68,10 +65,14 @@ namespace MEM {
             freeList = reinterpret_cast<void**>(ptr);
 
             allocatedMemory -= sizeof(T);
-            #ifdef DEBUG_MODE
+            #ifdef DEBUG
             numberOfAllocations--;
             #endif
         }
+
+        //  Copying allocators might cause errors
+        PoolAllocator(const PoolAllocator& rhs)                 = delete;
+        PoolAllocator& operator = (const PoolAllocator& rhs)    = delete;
     };
 }
 

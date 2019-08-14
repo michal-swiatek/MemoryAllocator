@@ -13,7 +13,6 @@ namespace MEM {
         void* currPos = nullptr;
 
     public:
-        LinearAllocator() { }
         LinearAllocator(size_t chunkSize, void* memoryChunk) : Allocator(chunkSize, memoryChunk), currPos(memoryChunk) { }
         ~LinearAllocator() { memoryChunk = currPos = nullptr; }
 
@@ -28,7 +27,7 @@ namespace MEM {
             if (allocatedMemory + sizeInBytes + adjustment > chunkSize)  return nullptr;
 
             allocatedMemory += sizeInBytes + adjustment;
-            #ifdef DEBUG_MODE
+            #ifdef DEBUG
             numberOfAllocations++;
             #endif
 
@@ -48,10 +47,14 @@ namespace MEM {
             currPos = memoryChunk;
 
             allocatedMemory = 0;
-            #ifdef DEBUG_MODE
+            #ifdef DEBUG
             numberOfAllocations = 0;
             #endif
         }
+
+        //  Copying allocators might cause errors
+        LinearAllocator(const LinearAllocator& rhs)                 = delete;
+        LinearAllocator& operator = (const LinearAllocator& rhs)    = delete;
     };
 }
 #endif // __LINEAR_ALLOCATOR__

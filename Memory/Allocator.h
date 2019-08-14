@@ -15,18 +15,11 @@ namespace MEM {
 
         size_t chunkSize;
         size_t allocatedMemory; //  Number of memory allocated during allocator lifetime
-        #ifdef DEBUG_MODE
+        #if DEBUG
         size_t numberOfAllocations;
         #endif
 
     public:
-        Allocator() : memoryChunk(nullptr), chunkSize(0), allocatedMemory(0)
-        {
-            #ifdef DEBUG_MODE
-            numberOfAllocations = 0;
-            #endif
-        }
-
         Allocator(size_t chunkSize, void* memoryChunk)
         {
             assert(chunkSize > 0 && memoryChunk);
@@ -35,14 +28,14 @@ namespace MEM {
 
             this->chunkSize = chunkSize;
             this->allocatedMemory = 0;
-            #ifdef DEBUG_MODE
+            #if DEBUG
             this->numberOfAllocations = 0;
             #endif
         }
 
         virtual ~Allocator()
         {
-            #ifdef DEBUG_MODE
+            #if DEBUG
             assert(allocatedMemory == 0 && numberOfAllocations == 0);
             #endif
         }
@@ -51,8 +44,8 @@ namespace MEM {
         //  Memory allocation
         //
 
-        virtual void* allocate(size_t sizeInBytes, uint8_t alignment = 4) = 0;
-        virtual void  deallocate(void* ptr) = 0;
+        inline virtual void* allocate(size_t sizeInBytes, uint8_t alignment = 4) = 0;
+        inline virtual void  deallocate(void* ptr) = 0;
 
         //  Use this instead of new and delete
 
@@ -76,9 +69,13 @@ namespace MEM {
 
         inline size_t getAllocatedMemory() const { return allocatedMemory; }
         inline size_t getRemainingMemory() const { return chunkSize - allocatedMemory; }
-        #ifdef DEBUG_MODE
+        #if DEBUG
         inline size_t getNumberOfAllocations() const { return numberOfAllocations; }
         #endif
+
+        //  Copying allocators might cause errors
+        Allocator(const Allocator& rhs)                 = delete;
+        Allocator& operator = (const Allocator& rhs)    = delete;
     };
 
     //  Helper functions
